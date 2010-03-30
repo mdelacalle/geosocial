@@ -37,7 +37,14 @@ public class GeoSocial
    public void init() {
       try {
 
-         //   authenticate();
+         final Thread thread = new Thread(new Runnable() {
+            public void run() {
+               authenticate();
+            }
+         });
+         thread.setDaemon(true);
+         thread.start();
+
 
          // Create World Window GL Canvas
          this.wwd = new WorldWindowGLCanvas();
@@ -67,7 +74,7 @@ public class GeoSocial
       final AuthDialog auth = new AuthDialog();
 
       auth.setAlwaysOnTop(true);
-      auth.setLocation(this.getWidth() / 2, this.getHeight() / 2);
+      auth.setLocation((this.getWidth() / 2) - 100, this.getHeight() / 2);
 
       auth.pack();
       auth.setVisible(true);
