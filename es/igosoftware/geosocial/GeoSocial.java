@@ -7,8 +7,12 @@ import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.util.StatusBar;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JApplet;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import winterwell.jtwitter.Twitter;
 
@@ -28,6 +32,8 @@ public class GeoSocial
    private WorldWindowGLCanvas wwd;
    private StatusBar           statusBar;
    private Twitter             tw;
+   private final AuthDialog    auth             = new AuthDialog();
+   private JPanel              twitterPanel     = new JPanel();
 
 
    public GeoSocial() {}
@@ -37,18 +43,12 @@ public class GeoSocial
    public void init() {
       try {
 
-         final Thread thread = new Thread(new Runnable() {
-            public void run() {
-               authenticate();
-            }
-         });
-         thread.setDaemon(true);
-         thread.start();
+         authenticate();
 
 
          // Create World Window GL Canvas
          this.wwd = new WorldWindowGLCanvas();
-         this.getContentPane().add(this.wwd, BorderLayout.CENTER);
+
 
          // Create the default model as described in the current worldwind properties.
          final Model m = (Model) WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
@@ -61,6 +61,16 @@ public class GeoSocial
          // Forward events to the status bar to provide the cursor position info.
          this.statusBar.setEventSource(this.wwd);
 
+
+         final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+
+         sp.add(getTwitterPanel());
+         sp.add(this.wwd);
+
+         sp.setDividerLocation(this.getWidth() / 5);
+         this.getContentPane().add(sp);
+
+
       }
       catch (final Throwable e) {
          e.printStackTrace();
@@ -68,16 +78,44 @@ public class GeoSocial
    }
 
 
+   private Component getTwitterPanel() {
+
+      twitterPanel.add(new JLabel("not connected on twitter"));
+      return twitterPanel;
+   }
+
+
    private void authenticate() {
 
+      final Thread thread = new Thread(new Runnable() {
+         public void run() {
+            auth.setAlwaysOnTop(true);
+            auth.setLocation((GeoSocial.this.getWidth() / 2) - 100, GeoSocial.this.getHeight() / 2);
 
-      final AuthDialog auth = new AuthDialog();
+            auth.pack();
+            auth.setVisible(true);
+            initializeTwitter();
+         }
 
-      auth.setAlwaysOnTop(true);
-      auth.setLocation((this.getWidth() / 2) - 100, this.getHeight() / 2);
 
-      auth.pack();
-      auth.setVisible(true);
+         private void initializeTwitter() {
+
+            while (tw == null) {
+               try {
+                  tw = auth.getTwitterObject();
+                  tw.getScreenName();
+               }
+               catch (final NullPointerException e) {}
+            }
+
+            twitterPanel = new JPanel();
+            twitterPanel.add(new JLabel(tw.getScreenName()));
+            twitterPanel.repaint();
+
+         }
+      });
+      thread.setDaemon(true);
+      thread.start();
 
 
    }

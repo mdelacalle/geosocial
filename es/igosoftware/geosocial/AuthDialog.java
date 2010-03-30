@@ -60,10 +60,17 @@ public class AuthDialog
          panelTexts.add(userl);
 
          final JTextField userT = new JTextField(15);
+
+         //TODO:quitar
+         userT.setText("geoigotwit");
+
          panelTexts.add(userT);
          final JLabel passl = new JLabel("Password:");
          panelTexts.add(passl);
          final JPasswordField passT = new JPasswordField(15);
+
+         //TODO:quitar
+         passT.setText("hola12");
          panelTexts.add(passT);
 
 
