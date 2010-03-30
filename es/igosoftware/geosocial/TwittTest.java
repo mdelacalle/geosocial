@@ -1,17 +1,38 @@
 package es.igosoftware.geosocial;
 
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+
+import winterwell.jtwitter.Twitter;
+import es.igosoftware.geosocial.gui.TwitterPanel;
+
 
 public class TwittTest {
 
    /**
     * @param args
     */
+
+   @SuppressWarnings("all")
    public static void main(final String[] args) {
 
 
-      final AuthDialog auth = new AuthDialog();
-      auth.pack();
-      auth.setVisible(true);
+      final JFrame f = new JFrame("twp");
+
+      final TwitterPanel tp = new TwitterPanel();
+
+      final Twitter tw = new Twitter("geoigotwit", "hola12");
+      tp.setUser(tw.getUser(tw.getScreenName()));
+      f.add(tp);
+      f.pack();
+      f.setSize(new Dimension(200, 600));
+      f.setVisible(true);
+
+
+      //      final AuthDialog auth = new AuthDialog();
+      //      auth.pack();
+      //      auth.setVisible(true);
 
 
       //

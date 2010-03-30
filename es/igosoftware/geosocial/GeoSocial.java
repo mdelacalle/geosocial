@@ -1,5 +1,7 @@
 package es.igosoftware.geosocial;
 
+import es.igosoftware.geosocial.gui.AuthDialog;
+import es.igosoftware.geosocial.gui.TwitterPanel;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -11,7 +13,6 @@ import java.awt.Component;
 
 import javax.swing.JApplet;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import winterwell.jtwitter.Twitter;
@@ -33,7 +34,7 @@ public class GeoSocial
    private StatusBar           statusBar;
    private Twitter             tw;
    private final AuthDialog    auth             = new AuthDialog();
-   private JPanel              twitterPanel     = new JPanel();
+   private final TwitterPanel  twitterPanel     = new TwitterPanel();
 
 
    public GeoSocial() {}
@@ -64,7 +65,7 @@ public class GeoSocial
 
          final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-         sp.add(getTwitterPanel());
+         sp.add(getDisconnectedTwitterPanel());
          sp.add(this.wwd);
 
          sp.setDividerLocation(this.getWidth() / 5);
@@ -78,9 +79,11 @@ public class GeoSocial
    }
 
 
-   private Component getTwitterPanel() {
+   private Component getDisconnectedTwitterPanel() {
 
-      twitterPanel.add(new JLabel("not connected on twitter"));
+      if (tw == null) {
+         twitterPanel.add(new JLabel("not connected on twitter"));
+      }
       return twitterPanel;
    }
 
@@ -108,8 +111,12 @@ public class GeoSocial
                catch (final NullPointerException e) {}
             }
 
-            twitterPanel = new JPanel();
-            twitterPanel.add(new JLabel(tw.getScreenName()));
+            twitterPanel.removeAll();
+
+
+            twitterPanel.setUser(tw.getUser(tw.getScreenName()));
+
+
             twitterPanel.repaint();
 
          }
