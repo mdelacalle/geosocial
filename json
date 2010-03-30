@@ -1,0 +1,70 @@
+{"text":"http://tweetphoto.com/16020852  first debug geotwit",
+ "contributors":null,
+  "geo":{"type":"Point","coordinates":[39.468823,-6.39472]}
+  ,"in_reply_to_screen_name":null,"truncated":false,"id":11141446216,
+  "source":"<a href=\"http://www.tweetdeck.com/\" rel=\"nofollow\">TweetDeck<\/a>","favorited":false,"in_reply_to_status_id":null,"in_reply_to_user_id":null,"created_at":"Sat Mar 27 12:29:22 +0000 2010","place":null,
+  
+  
+  "user":{"location":"C‡ceres",
+  "profile_background_tile":false,"statuses_count":2,"lang":"en","profile_link_color":"0000ff","id":126869753,"following":false,"favourites_count":0,"protected":false,"profile_text_color":"000000","verified":false,"description":"developing a geotwitter client","contributors_enabled":false,"profile_sidebar_border_color":"87bc44","name":"Manuel de la Calle","profile_background_color":"9ae4e8","created_at":"Sat Mar 27 07:15:42 +0000 2010","followers_count":3,"geo_enabled":true,"profile_background_image_url":"http://s.twimg.com/a/1269553143/images/themes/theme1/bg.png","url":"http://igosoftware.wordpress.com","utc_offset":-36000,"time_zone":"Hawaii","notifications":false,"friends_count":14,"profile_sidebar_fill_color":"e0ff92","screen_name":"geoigotwit","profile_image_url":"http://a3.twimg.com/profile_images/778287591/logo_igo_125_normal.jpg"},"coordinates":{"type":"Point","coordinates":[-6.39472,39.468823]}}
+
+
+
+
+http://tweetphoto.com/16020852  
+
+first debug geotwit
+
+
+
+
+
+
+
+
+
+
+
+{"text":"@xurxosanz que exigente que eres, ta bonito, hombre!",
+  "contributors":null,
+  "geo":null,
+  "in_reply_to_screen_name":"xurxosanz",
+  "truncated":false,
+  "id":10936322334,
+  "source":"web",
+  "favorited":false,
+  "in_reply_to_status_id":null,
+  "in_reply_to_user_id":14291056,
+  "created_at":"Tue Mar 23 17:50:52 +0000 2010",
+  "place":null}
+  "user":{
+  	"location":"cc, spain",
+  	"statuses_count":4,
+  	"profile_background_tile":false,
+  	"lang":"en",
+  	"profile_link_color":"0000ff",
+  	"id":88251237,
+  	"following":false,
+  	"favourites_count":0,
+  	"protected":false,
+  	"profile_text_color":"000000",
+  	"contributors_enabled":false,
+  	"description":"",
+  	"verified":false,
+  	"profile_sidebar_border_color":"87bc44",
+  	"name":"manuel de la calle",
+  	"profile_background_color":"9ae4e8",
+  	"created_at":"Sat Nov 07 19:22:05 +0000 2009",
+  	"followers_count":4,
+  	"geo_enabled":true,
+  	"profile_background_image_url":"http://s.twimg.com/a/1269020849/images/themes/theme1/bg.png",
+  	"url":"http://igosoftware.wordpress.com",
+  	"utc_offset":3600,
+  	"time_zone":"Madrid","notifications":false,"friends_count":24,"profile_sidebar_fill_color":"e0ff92","screen_name":"mdelacalle","profile_image_url":"http://a3.twimg.com/profile_images/759894131/michael-knight-rider-hoff_normal.jpg"},"coordinates":null}
+
+  	
+ {
+ "location":"cc, spain",
+ "statuses_count":4,
+ "profile_background_tile":false,"lang":"en","profile_link_color":"0000ff","id":88251237,"following":false,"favourites_count":0,"protected":false,"profile_text_color":"000000","contributors_enabled":false,"description":"","verified":false,"profile_sidebar_border_color":"87bc44","name":"manuel de la calle","profile_background_color":"9ae4e8","created_at":"Sat Nov 07 19:22:05 +0000 2009","followers_count":4,"geo_enabled":true,"profile_background_image_url":"http://s.twimg.com/a/1269020849/images/themes/theme1/bg.png","url":"http://igosoftware.wordpress.com","utc_offset":3600,"time_zone":"Madrid","notifications":false,"friends_count":24,"profile_sidebar_fill_color":"e0ff92","screen_name":"mdelacalle","profile_image_url":"http://a3.twimg.com/profile_images/759894131/michael-knight-rider-hoff_normal.jpg"}
+  	
