@@ -112,11 +112,8 @@ public class GeoSocial
             }
 
             twitterPanel.removeAll();
-
-
             twitterPanel.setUser(tw.getUser(tw.getScreenName()));
-
-
+            twitterPanel.refreshTwits(tw);
             twitterPanel.repaint();
 
          }

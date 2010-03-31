@@ -10,6 +10,14 @@ import es.igosoftware.geosocial.gui.TwitterPanel;
 
 public class TwittTest {
 
+
+   final static JFrame       _f  = new JFrame("twp");
+
+   final static TwitterPanel _tp = new TwitterPanel();
+
+   static Twitter            _tw = new Twitter();
+
+
    /**
     * @param args
     */
@@ -18,16 +26,28 @@ public class TwittTest {
    public static void main(final String[] args) {
 
 
-      final JFrame f = new JFrame("twp");
+      TwittTest._f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      final TwitterPanel tp = new TwitterPanel();
+      TwittTest._tw = new Twitter("geoigotwit", "hola12");
 
-      final Twitter tw = new Twitter("geoigotwit", "hola12");
-      tp.setUser(tw.getUser(tw.getScreenName()));
-      f.add(tp);
-      f.pack();
-      f.setSize(new Dimension(200, 600));
-      f.setVisible(true);
+
+      //  testUserPanel();
+
+      testRefreshPanel();
+
+
+      //      tp.refreshTwits(tw);
+      //
+      //      //      tp.setUser(tw.getUser(tw.getScreenName()));
+      //      f.add(tp);
+      //      f.pack();
+      //      f.setSize(new Dimension(200, 600));
+      //      f.setVisible(true);
+
+
+      //Scheduled Services
+      //      final Timer timer = new Timer();
+      //      timer.scheduleAtFixedRate(new TwitTask(tw), 0, 5000);
 
 
       //      final AuthDialog auth = new AuthDialog();
@@ -61,5 +81,24 @@ public class TwittTest {
       //      }
 
 
+   }
+
+
+   private static void testRefreshPanel() {
+      testUserPanel();
+      TwittTest._tp.refreshTwits(TwittTest._tw);
+      TwittTest._f.add(TwittTest._tp);
+      TwittTest._f.pack();
+      TwittTest._f.setSize(new Dimension(200, 600));
+      TwittTest._f.setVisible(true);
+   }
+
+
+   private static void testUserPanel() {
+      TwittTest._tp.setUser(TwittTest._tw.getUser(TwittTest._tw.getScreenName()));
+      TwittTest._f.add(TwittTest._tp);
+      TwittTest._f.pack();
+      TwittTest._f.setSize(new Dimension(200, 600));
+      TwittTest._f.setVisible(true);
    }
 }
