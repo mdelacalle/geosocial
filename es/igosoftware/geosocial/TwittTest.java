@@ -28,7 +28,7 @@ public class TwittTest {
 
       TwittTest._f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      TwittTest._tw = new Twitter("geoigotwit", "hola12");
+      TwittTest._tw = new Twitter("mdelacalle", "hola12");
 
 
       //  testUserPanel();

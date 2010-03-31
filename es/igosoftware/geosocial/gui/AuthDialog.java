@@ -1,7 +1,6 @@
 package es.igosoftware.geosocial.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Window;
@@ -51,7 +50,7 @@ public class AuthDialog
          final Method mSetWindowOpacity = awtUtilitiesClass.getMethod("setWindowOpacity", Window.class, float.class);
          mSetWindowOpacity.invoke(null, this, Float.valueOf(0.85f));
          this.setUndecorated(true);
-         this.setBackground(new Color(193, 222, 238));
+         this.setBackground(Styles.blueTwitter);
 
 
          final JPanel panelTexts = new JPanel();
