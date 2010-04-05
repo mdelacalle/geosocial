@@ -7,17 +7,24 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
@@ -40,6 +47,7 @@ public class TwitterPanel
       try {
          image = javax.imageio.ImageIO.read(new File("img/bgtw.png"));
          this.setLayout(new VerticalLayout());
+         this.setDoubleBuffered(true);
 
       }
       catch (final Exception e) { /*handled in paintComponent()*/}
@@ -115,16 +123,26 @@ public class TwitterPanel
       statusPanel.setBackground(new Color(0, 0, 0, 0));
 
       final List<Status> statuses = tw.getHomeTimeline();
-      final int i = 0;
+
       for (final Status status : statuses) {
          statusPanel.add(getMessagePanel(status));
       }
 
       final JScrollPane scroll = new JScrollPane(statusPanel);
+
+      scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+
+         @Override
+         public void adjustmentValueChanged(final AdjustmentEvent e) {
+            // TODO Auto-generated method stub
+            TwitterPanel.this.repaint();
+         }
+      });
+
       scroll.setBackground(new Color(0, 0, 0, 0));
 
       scroll.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() - _userPanel.getHeight()));
-      scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+      scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 
@@ -135,46 +153,86 @@ public class TwitterPanel
    private Component getMessagePanel(final Status status) {
 
       final JPanel messagePanel = new JPanel();
-      messagePanel.setLayout(new FlowLayout());
+      messagePanel.setLayout(new VerticalLayout());
       messagePanel.setBackground(new Color(0, 0, 0, 0));
       messagePanel.setBorder(BorderFactory.createLineBorder(Styles.blueDarkTwitter));
 
-      //     try {
+      try {
 
 
-      final User user = status.getUser();
+         final User user = status.getUser();
 
 
-      //         final ImageIcon iiProfileScaled = new ImageIcon(
-      //                  (new ImageIcon(user.getProfileImageUrl().toURL()).getImage().getScaledInstance(25, 25, Image.SCALE_FAST)));
-      //
-      //
-      //         final JLabel img = new JLabel(iiProfileScaled);
-      //         messagePanel.add(img);
+         final ImageIcon iiProfileScaled = new ImageIcon(
+                  (new ImageIcon(user.getProfileImageUrl().toURL()).getImage().getScaledInstance(30, 30, Image.SCALE_FAST)));
 
-      final JPanel textsPanel = new JPanel(new VerticalLayout());
-      textsPanel.setBackground(new Color(0, 0, 0, 0));
-      final JLabel userLabel = new JLabel("@" + user.getScreenName());
-      //      userLabel.setFont(Styles.font9Bold);
-      //      userLabel.setForeground(Styles.blueDarkTwitter);
 
-      textsPanel.add(userLabel);
+         final JLabel img = new JLabel("@" + user.getScreenName(), iiProfileScaled, SwingConstants.LEFT);
+         img.setForeground(Styles.blueDarkTwitter);
+         img.setFont(Styles.font12Bold);
 
-      final JTextArea testLabel = new JTextArea(status.getText(), 5, 25);
-      testLabel.setBackground(Styles.blueTwitter);
-      testLabel.setAutoscrolls(false);
-      testLabel.setLineWrap(true);
-      testLabel.setWrapStyleWord(true);
-      testLabel.setEditable(false);
-      testLabel.setFont(Styles.font9);
-      textsPanel.add(testLabel);
+         img.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseReleased(final MouseEvent e) {}
 
-      messagePanel.add(textsPanel);
 
-      //      }
-      //      catch (final MalformedURLException e) {
-      //         System.out.println("User Photo Exception!");
-      //      }
+            @Override
+            public void mousePressed(final MouseEvent e) {}
+
+
+            @Override
+            public void mouseExited(final MouseEvent e) {}
+
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {}
+
+
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+               System.out.println("Show the User Profile");
+            }
+         });
+
+         messagePanel.add(img);
+
+         final JPanel textsPanel = new JPanel(new VerticalLayout());
+         textsPanel.setBackground(new Color(0, 0, 0, 0));
+
+
+         final JEditorPane testLabel = new JEditorPane();
+         testLabel.setContentType("text/html");
+
+         //TODO:Extract the URLs
+
+         testLabel.setText("<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
+                           + "</span>  <a href=\"http://www.igosoftware.es\"> &nbsp; igo</a></html>");
+         // testLabel.setBackground(Styles.blueTwitter);
+         testLabel.setBackground(new Color(0, 0, 0, 0));
+         testLabel.setAutoscrolls(false);
+         testLabel.setPreferredSize(new Dimension(177, 85));
+         testLabel.setEditable(false);
+         testLabel.setFont(Styles.font9);
+
+         testLabel.addHyperlinkListener(new HyperlinkListener() {
+
+            @Override
+            public void hyperlinkUpdate(final HyperlinkEvent e) {
+
+               if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                  System.out.println(e.getURL());
+               }
+
+            }
+         });
+
+         textsPanel.add(testLabel);
+         messagePanel.add(textsPanel);
+
+      }
+      catch (final MalformedURLException e) {
+         System.out.println("User Photo Exception!");
+      }
 
 
       return messagePanel;

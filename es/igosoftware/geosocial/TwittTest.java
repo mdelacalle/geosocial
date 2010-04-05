@@ -28,6 +28,7 @@ public class TwittTest {
 
       TwittTest._f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
       TwittTest._tw = new Twitter("mdelacalle", "hola12");
 
 
@@ -87,7 +88,7 @@ public class TwittTest {
    private static void testRefreshPanel() {
       testUserPanel();
       TwittTest._tp.refreshTwits(TwittTest._tw);
-      TwittTest._f.add(TwittTest._tp);
+      TwittTest._tp.setDoubleBuffered(true);
       TwittTest._f.pack();
       TwittTest._f.setSize(new Dimension(200, 600));
       TwittTest._f.setVisible(true);
