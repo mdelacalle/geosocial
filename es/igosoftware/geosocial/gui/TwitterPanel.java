@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,12 +24,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.Twitter.Status;
 import winterwell.jtwitter.Twitter.User;
+import es.igosoftware.geosocial.geo.Geocoding;
 
 
 public class TwitterPanel
@@ -118,35 +121,75 @@ public class TwitterPanel
 
    public void refreshTwits(final Twitter tw) {
 
-      final JPanel statusPanel = new JPanel();
-      statusPanel.setLayout(new VerticalLayout());
-      statusPanel.setBackground(new Color(0, 0, 0, 0));
 
-      final List<Status> statuses = tw.getHomeTimeline();
+      final JLabel label = new JLabel("loading twits...");
+      this.add(label);
 
-      for (final Status status : statuses) {
-         statusPanel.add(getMessagePanel(status));
-      }
-
-      final JScrollPane scroll = new JScrollPane(statusPanel);
-
-      scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+      final SwingWorker worker = new SwingWorker() {
 
          @Override
-         public void adjustmentValueChanged(final AdjustmentEvent e) {
-            // TODO Auto-generated method stub
-            TwitterPanel.this.repaint();
+         protected JScrollPane doInBackground() throws Exception {
+            final JPanel statusPanel = new JPanel();
+            statusPanel.setLayout(new VerticalLayout());
+            statusPanel.setBackground(new Color(0, 0, 0, 0));
+
+            final List<Status> statuses = tw.getHomeTimeline();
+
+            for (final Status status : statuses) {
+               statusPanel.add(getMessagePanel(status));
+
+               final String position = status.getGeo();
+
+               if (position == null) {
+                  System.out.println(Geocoding.getCoordinates(status.getUser().getLocation()));
+               }
+               else {
+                  System.out.println(position);
+               }
+            }
+
+            final JScrollPane scroll = new JScrollPane(statusPanel);
+
+            scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+
+               @Override
+               public void adjustmentValueChanged(final AdjustmentEvent e) {
+                  // TODO Auto-generated method stub
+                  TwitterPanel.this.repaint();
+               }
+            });
+
+            scroll.setBackground(new Color(0, 0, 0, 0));
+
+            scroll.setPreferredSize(new Dimension(TwitterPanel.this.getWidth(), TwitterPanel.this.getHeight()
+                                                                                - _userPanel.getHeight()));
+            scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+            TwitterPanel.this.remove(label);
+
+            return scroll;
+
          }
-      });
 
-      scroll.setBackground(new Color(0, 0, 0, 0));
-
-      scroll.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() - _userPanel.getHeight()));
-      scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-      scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+      };
 
 
-      this.add(scroll);
+      worker.run();
+
+      try {
+         this.add((JScrollPane) worker.get());
+      }
+      catch (final InterruptedException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      catch (final ExecutionException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+
+
    }
 
 
@@ -210,7 +253,7 @@ public class TwitterPanel
          // testLabel.setBackground(Styles.blueTwitter);
          testLabel.setBackground(new Color(0, 0, 0, 0));
          testLabel.setAutoscrolls(false);
-         testLabel.setPreferredSize(new Dimension(177, 85));
+         testLabel.setPreferredSize(new Dimension(177, 88));
          testLabel.setEditable(false);
          testLabel.setFont(Styles.font9);
 

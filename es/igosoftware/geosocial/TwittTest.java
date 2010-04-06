@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import winterwell.jtwitter.Twitter;
+import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.gui.TwitterPanel;
 
 
@@ -32,10 +33,10 @@ public class TwittTest {
       TwittTest._tw = new Twitter("mdelacalle", "hola12");
 
 
-      //  testUserPanel();
-
+      // testUserPanel();
       testRefreshPanel();
 
+      // testGeolocalization("Sabadell");
 
       //      tp.refreshTwits(tw);
       //
@@ -85,6 +86,14 @@ public class TwittTest {
    }
 
 
+   @SuppressWarnings("all")
+   private static void testGeolocalization(final String placeName) {
+      System.out.println(Geocoding.getCoordinates(placeName));
+      System.out.println("Geolocalization OK");
+   }
+
+
+   @SuppressWarnings("all")
    private static void testRefreshPanel() {
       testUserPanel();
       TwittTest._tp.refreshTwits(TwittTest._tw);
@@ -92,14 +101,20 @@ public class TwittTest {
       TwittTest._f.pack();
       TwittTest._f.setSize(new Dimension(200, 600));
       TwittTest._f.setVisible(true);
+
+      System.out.println("Refresh Panel OK");
+
    }
 
 
+   @SuppressWarnings("all")
    private static void testUserPanel() {
       TwittTest._tp.setUser(TwittTest._tw.getUser(TwittTest._tw.getScreenName()));
       TwittTest._f.add(TwittTest._tp);
       TwittTest._f.pack();
       TwittTest._f.setSize(new Dimension(200, 600));
       TwittTest._f.setVisible(true);
+
+      System.out.println("User Panel OK");
    }
 }
