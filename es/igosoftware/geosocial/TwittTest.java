@@ -96,7 +96,7 @@ public class TwittTest {
    @SuppressWarnings("all")
    private static void testRefreshPanel() {
       testUserPanel();
-      TwittTest._tp.refreshTwits(TwittTest._tw);
+      TwittTest._tp.refreshTwits(TwittTest._tw, null);
       TwittTest._tp.setDoubleBuffered(true);
       TwittTest._f.pack();
       TwittTest._f.setSize(new Dimension(200, 600));

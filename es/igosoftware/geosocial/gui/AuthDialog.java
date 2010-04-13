@@ -26,6 +26,7 @@ public class AuthDialog
             JDialog {
 
    private Twitter           _twit;
+   private JPanel            _twitterPanel;
 
    /**
     * 
@@ -34,7 +35,8 @@ public class AuthDialog
    private final JLabel      _result          = new JLabel("Insert User&Password");
 
 
-   public Twitter getTwitterObject() {
+   public Twitter getTwitterObject(final TwitterPanel twitterPanel) {
+      _twitterPanel = twitterPanel;
       return _twit;
    }
 
@@ -85,6 +87,10 @@ public class AuthDialog
             @SuppressWarnings("deprecation")
             @Override
             public void actionPerformed(final ActionEvent e) {
+
+               _twitterPanel.removeAll();
+               _twitterPanel.add(new JLabel("connecting ...."));
+               _twitterPanel.repaint();
 
                _twit = new Twitter(userT.getText(), passT.getText());
 

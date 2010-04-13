@@ -35,6 +35,7 @@ public class GeoSocial
    private Twitter             tw;
    private final AuthDialog    auth             = new AuthDialog();
    private final TwitterPanel  twitterPanel     = new TwitterPanel();
+   private JSplitPane          _sp;
 
 
    public GeoSocial() {}
@@ -63,13 +64,13 @@ public class GeoSocial
          this.statusBar.setEventSource(this.wwd);
 
 
-         final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+         _sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-         sp.add(getDisconnectedTwitterPanel());
-         sp.add(this.wwd);
+         _sp.add(getDisconnectedTwitterPanel());
+         _sp.add(this.wwd);
 
-         sp.setDividerLocation(this.getWidth() / 5);
-         this.getContentPane().add(sp);
+         _sp.setDividerLocation(this.getWidth() / 5);
+         this.getContentPane().add(_sp);
 
 
       }
@@ -94,7 +95,6 @@ public class GeoSocial
          public void run() {
             auth.setAlwaysOnTop(true);
             auth.setLocation((GeoSocial.this.getWidth() / 2) - 100, GeoSocial.this.getHeight() / 2);
-
             auth.pack();
             auth.setVisible(true);
             initializeTwitter();
@@ -105,16 +105,14 @@ public class GeoSocial
 
             while (tw == null) {
                try {
-                  tw = auth.getTwitterObject();
+                  tw = auth.getTwitterObject(twitterPanel);
                   tw.getScreenName();
                }
                catch (final NullPointerException e) {}
             }
-
             twitterPanel.removeAll();
             twitterPanel.setUser(tw.getUser(tw.getScreenName()));
-            twitterPanel.refreshTwits(tw);
-            twitterPanel.repaint();
+            twitterPanel.refreshTwits(tw, wwd);
 
          }
       });
