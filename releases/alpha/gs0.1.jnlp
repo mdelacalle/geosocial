@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id -->
+   <jnlp href="http://github.com/downloads/mdelacalle/geosocial/gs0.1.jnlp">
+    <information>
+        <title>Geo Social alpha 1</title>
+        <vendor>IGO SOFTWARE</vendor>
+        <homepage href="http://igosoftware.wordpress.com"/>
+        <description>Geo Social alpha 1</description>
+        <description kind="short">Geo Social alpha 1</description>
+        <offline-allowed/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+     <resources os="Windows">
+       <property name="sun.java2d.noddraw" value="true"/>
+     </resources>
+     <resources>
+        <j2se href="http://java.sun.com/products/autodl/j2se" version="1.5+" initial-heap-size="512m"
+              max-heap-size="512m"/>
+        <property name="sun.java2d.noddraw" value="true"/>
+        <jar href="http://github.com/downloads/mdelacalle/geosocial/gs0.1.jar" main="true"/>
+        <jar href="http://github.com/downloads/mdelacalle/geosocial/worldwind0.1.jar"/>
+        <extension name="jogl"
+                   href="http://download.java.net/media/jogl/builds/archive/jsr-231-webstart-current/jogl.jnlp"/>
+     </resources>
+     <!-- Width and heigth are overwritten by the surrounding web page -->
+     <applet-desc
+         name=GeoSocial"
+         main-class="es.igosoftware.geosocial.GeoSocial"
+         width="1000" height="600">
+         <param name="separate_jvm" value="true" />
+     </applet-desc>
+   </jnlp>
+
+
