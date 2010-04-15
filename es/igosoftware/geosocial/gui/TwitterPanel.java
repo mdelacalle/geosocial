@@ -1,5 +1,6 @@
 package es.igosoftware.geosocial.gui;
 
+import es.igosoftware.geosocial.Config;
 import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.geo.SimbologyRenderer;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
@@ -15,8 +16,8 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +54,9 @@ public class TwitterPanel
 
    public TwitterPanel() {
       try {
-         image = javax.imageio.ImageIO.read(new File("img/bgtw.png"));
+
+         System.out.println(Config.imgPath + "bgtw.png");
+         image = javax.imageio.ImageIO.read(new URL(Config.imgPath + "bgtw.png"));
          this.setLayout(new VerticalLayout());
          this.setDoubleBuffered(true);
 
@@ -247,7 +250,6 @@ public class TwitterPanel
          final JEditorPane testLabel = new JEditorPane();
          testLabel.setContentType("text/html");
 
-         //TODO:Extract the URLs
 
          testLabel.setText("<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
                            + "</span>  <a href=\"http://www.igosoftware.es\"> &nbsp; igo</a></html>");
