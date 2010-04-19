@@ -1008,7 +1008,7 @@ public class Twitter {
          //				if (f!=null) s++;
          //			}
          final Status s = tw.setStatus(args[2]);
-         System.out.println(s);
+         //     System.out.println(s);
          return;
       }
       System.out.println("Java interface for Twitter");

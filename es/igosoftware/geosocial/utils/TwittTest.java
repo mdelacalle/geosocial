@@ -1,10 +1,12 @@
-package es.igosoftware.geosocial;
+package es.igosoftware.geosocial.utils;
 
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter.Status;
 import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.gui.TwitterPanel;
 
@@ -30,11 +32,10 @@ public class TwittTest {
       TwittTest._f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-      TwittTest._tw = new Twitter("mdelacalle", "hola12");
+      TwittTest._tw = new Twitter("geoigotwit", "hola12");
 
-
-      // testUserPanel();
       testRefreshPanel();
+
 
       // testGeolocalization("Sabadell");
 
@@ -83,6 +84,28 @@ public class TwittTest {
       //      }
 
 
+   }
+
+
+   private static void testParseStatus() {
+
+
+      final List<Status> statuses = TwittTest._tw.getHomeTimeline();
+
+      for (final Status status : statuses) {
+         final StatusParsed statusParsed = URLParser.parseStatus(status);
+         System.out.println(status);
+         System.out.println(statusParsed.toString());
+      }
+
+   }
+
+
+   @SuppressWarnings("unused")
+   private static void testAll() {
+      testParseStatus();
+      testUserPanel();
+      testRefreshPanel();
    }
 
 

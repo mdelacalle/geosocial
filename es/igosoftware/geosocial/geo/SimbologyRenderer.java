@@ -1,5 +1,6 @@
 package es.igosoftware.geosocial.geo;
 
+import es.igosoftware.geosocial.utils.Logger;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
@@ -24,8 +25,13 @@ public class SimbologyRenderer {
       final ArrayList<Marker> markersList = new ArrayList<Marker>();
       for (final String position : positions) {
 
+         Logger.DEBUG(position);
+
          final String latitude = position.substring(0, position.indexOf(","));
          final String longitude = position.substring(position.indexOf(",") + 1);
+
+
+         Logger.DEBUG("latitude:" + latitude + "," + "longitude:" + longitude);
 
          final BasicMarker marker = new BasicMarker(new Position(new LatLon(Angle.fromDegrees(Double.parseDouble(latitude)),
                   Angle.fromDegrees(Double.parseDouble(longitude))), 0), markerAttrs);

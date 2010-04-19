@@ -3,6 +3,7 @@ package es.igosoftware.geosocial.gui;
 import es.igosoftware.geosocial.Config;
 import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.geo.SimbologyRenderer;
+import es.igosoftware.geosocial.utils.Logger;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 
 import java.awt.BorderLayout;
@@ -147,6 +148,7 @@ public class TwitterPanel
             for (final Status status : statuses) {
                statusPanel.add(getMessagePanel(status));
                final String position = status.getGeo();
+               Logger.DEBUG("Twitter Object:" + position);
                if (position == null) {
                   positions.add(Geocoding.getCoordinates(status.getUser().getLocation()));
                }
