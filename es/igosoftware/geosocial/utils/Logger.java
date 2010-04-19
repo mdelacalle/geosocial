@@ -12,7 +12,7 @@ public class Logger {
    }
 
 
-   public static void CRITICAL(final String msg) {
+   public static void FATAL(final String msg) {
       System.out.println(msg);
    }
 

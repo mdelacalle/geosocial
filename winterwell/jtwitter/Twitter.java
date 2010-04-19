@@ -417,10 +417,6 @@ public class Twitter {
       Status(final JSONObject object,
              final User user) throws TwitterException {
          try {
-
-            System.out.println(object.toString());
-
-
             id = object.getLong("id");
             final String _text = jsonGet("text", object);
             text = unencode(_text);

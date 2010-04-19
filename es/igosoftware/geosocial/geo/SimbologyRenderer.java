@@ -23,7 +23,12 @@ public class SimbologyRenderer {
       final BasicMarkerAttributes markerAttrs = new BasicMarkerAttributes(new Material(Color.BLUE),
                BasicMarkerShape.ORIENTED_CONE, 1d, 6, 3);
       final ArrayList<Marker> markersList = new ArrayList<Marker>();
-      for (final String position : positions) {
+      for (String position : positions) {
+
+
+         if (position == null) {
+            position = "0,0";
+         }
 
          Logger.DEBUG(position);
 

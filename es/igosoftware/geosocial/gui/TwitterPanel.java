@@ -4,6 +4,8 @@ import es.igosoftware.geosocial.Config;
 import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.geo.SimbologyRenderer;
 import es.igosoftware.geosocial.utils.Logger;
+import es.igosoftware.geosocial.utils.StatusParsed;
+import es.igosoftware.geosocial.utils.URLParser;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 
 import java.awt.BorderLayout;
@@ -56,7 +58,7 @@ public class TwitterPanel
    public TwitterPanel() {
       try {
 
-         System.out.println(Config.imgPath + "bgtw.png");
+         Logger.DEBUG(Config.imgPath + "bgtw.png");
          image = javax.imageio.ImageIO.read(new URL(Config.imgPath + "bgtw.png"));
          this.setLayout(new VerticalLayout());
          this.setDoubleBuffered(true);
@@ -73,7 +75,7 @@ public class TwitterPanel
          g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
       }
       else {
-         System.out.println("image is null");
+         Logger.FATAL("image is null");
       }
    }
 
@@ -147,7 +149,13 @@ public class TwitterPanel
             final ArrayList<String> positions = new ArrayList<String>();
             for (final Status status : statuses) {
                statusPanel.add(getMessagePanel(status));
-               final String position = status.getGeo();
+               String position = status.getGeo();
+
+               if ((position != null) && (position.charAt(0) == '{')) {
+                  position = position.substring(position.indexOf('[') + 1, position.indexOf(']'));
+               }
+
+
                Logger.DEBUG("Twitter Object:" + position);
                if (position == null) {
                   positions.add(Geocoding.getCoordinates(status.getUser().getLocation()));
@@ -156,6 +164,8 @@ public class TwitterPanel
                   positions.add(position);
                }
             }
+
+
             SimbologyRenderer.renderPositions(positions, _wwd);
             final JScrollPane scroll = new JScrollPane(statusPanel);
 
@@ -253,12 +263,26 @@ public class TwitterPanel
          testLabel.setContentType("text/html");
 
 
-         testLabel.setText("<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
-                           + "</span>  <a href=\"http://www.igosoftware.es\"> &nbsp; igo</a></html>");
+         final StatusParsed statusParsed = URLParser.parseStatus(status);
+
+         Logger.DEBUG(statusParsed.toString());
+
+         final String statusHTML = "<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
+                                   + "</span></html>";
+
+         // TODO:REPLACE URL 
+         // TODO: PICS TREATMENT
+
+         // <a href=\"http://www.igosoftware.es\"> &nbsp; igo</a>
+
+
+         testLabel.setText(statusHTML);
+
+
          // testLabel.setBackground(Styles.blueTwitter);
          testLabel.setBackground(new Color(0, 0, 0, 0));
          testLabel.setAutoscrolls(false);
-         testLabel.setPreferredSize(new Dimension(177, 88));
+         testLabel.setPreferredSize(new Dimension(177, 100));
          testLabel.setEditable(false);
          testLabel.setFont(Styles.font9);
 
