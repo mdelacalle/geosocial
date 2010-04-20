@@ -5,6 +5,7 @@ import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.geo.SimbologyRenderer;
 import es.igosoftware.geosocial.utils.Logger;
 import es.igosoftware.geosocial.utils.StatusParsed;
+import es.igosoftware.geosocial.utils.SystemUtilities;
 import es.igosoftware.geosocial.utils.URLParser;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 
@@ -169,13 +170,15 @@ public class TwitterPanel
             SimbologyRenderer.renderPositions(positions, _wwd);
             final JScrollPane scroll = new JScrollPane(statusPanel);
 
-            scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            if (SystemUtilities.isMac()) {
+               scroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 
-               @Override
-               public void adjustmentValueChanged(final AdjustmentEvent e) {
-                  TwitterPanel.this.repaint();
-               }
-            });
+                  @Override
+                  public void adjustmentValueChanged(final AdjustmentEvent e) {
+                     TwitterPanel.this.repaint();
+                  }
+               });
+            }
 
             scroll.setBackground(new Color(0, 0, 0, 0));
             scroll.setPreferredSize(new Dimension(TwitterPanel.this.getWidth(), TwitterPanel.this.getHeight()
@@ -265,15 +268,11 @@ public class TwitterPanel
 
          final StatusParsed statusParsed = URLParser.parseStatus(status);
 
+
          Logger.DEBUG(statusParsed.toString());
 
-         final String statusHTML = "<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
-                                   + "</span></html>";
 
-         // TODO:REPLACE URL 
-         // TODO: PICS TREATMENT
-
-         // <a href=\"http://www.igosoftware.es\"> &nbsp; igo</a>
+         final String statusHTML = decorateMsg(statusParsed, status);
 
 
          testLabel.setText(statusHTML);
@@ -292,7 +291,7 @@ public class TwitterPanel
             public void hyperlinkUpdate(final HyperlinkEvent e) {
 
                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                  System.out.println(e.getURL());
+                  SystemUtilities.openBrowser(e.getURL());
                }
 
             }
@@ -304,6 +303,33 @@ public class TwitterPanel
       catch (final MalformedURLException e) {
          System.out.println("User Photo Exception!");
       }
+
+      Logger.DEBUG(System.getProperty("os.name"));
       return messagePanel;
+   }
+
+
+   private String decorateMsg(final StatusParsed statusParsed,
+                              final Status status) {
+
+      String htmlStatus = "<html><br><span style=\"font-family:monospace; font-size: 9px ;\">" + status.getText()
+                          + "</span></html>";
+
+      final List<String> mentions = statusParsed.getMentions();
+      final ArrayList<URL> urls = statusParsed.getUrls();
+      final ArrayList<URL> photos = statusParsed.getPhotos();
+
+      for (final String mention : mentions) {
+         htmlStatus = htmlStatus.replace("@" + mention, "<font color=red>" + "@" + mention + "</font>");
+      }
+      for (final URL url : urls) {
+         htmlStatus = htmlStatus.replace(url.toString(), "<a href=\"" + url.toString() + "\">" + url.toString() + "</a>");
+      }
+      //TODO: Visualization of the pics, now is a normal URL
+      for (final URL photo : photos) {
+         htmlStatus = htmlStatus.replace(photo.toString(), "<a href=\"" + photo.toString() + "\">" + photo.toString() + "</a>");
+      }
+      Logger.DEBUG(htmlStatus);
+      return htmlStatus;
    }
 }
