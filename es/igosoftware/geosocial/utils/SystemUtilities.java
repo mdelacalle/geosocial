@@ -13,7 +13,6 @@ public class SystemUtilities {
       if (System.getProperty("os.name").equals("Mac OS X")) {
          return true;
       }
-
       return false;
    }
 

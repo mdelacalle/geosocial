@@ -1,6 +1,7 @@
 package es.igosoftware.geosocial.gui;
 
 import es.igosoftware.geosocial.Config;
+import es.igosoftware.geosocial.geo.GSPosition;
 import es.igosoftware.geosocial.geo.Geocoding;
 import es.igosoftware.geosocial.geo.SimbologyRenderer;
 import es.igosoftware.geosocial.utils.Logger;
@@ -58,12 +59,9 @@ public class TwitterPanel
 
    public TwitterPanel() {
       try {
-
-         Logger.DEBUG(Config.imgPath + "bgtw.png");
          image = javax.imageio.ImageIO.read(new URL(Config.imgPath + "bgtw.png"));
          this.setLayout(new VerticalLayout());
          this.setDoubleBuffered(true);
-
       }
       catch (final Exception e) { /*handled in paintComponent()*/}
    }
@@ -147,23 +145,25 @@ public class TwitterPanel
             final List<Status> statuses = tw.getHomeTimeline();
 
 
-            final ArrayList<String> positions = new ArrayList<String>();
+            final ArrayList<GSPosition> positions = new ArrayList<GSPosition>();
             for (final Status status : statuses) {
                statusPanel.add(getMessagePanel(status));
-               String position = status.getGeo();
 
-               if ((position != null) && (position.charAt(0) == '{')) {
-                  position = position.substring(position.indexOf('[') + 1, position.indexOf(']'));
+               String geo = status.getGeo();
+
+               //TODO: Change, this comprobation it's not robust
+               if ((geo != null) && (geo.charAt(0) == '{')) {
+                  geo = geo.substring(geo.indexOf('[') + 1, geo.indexOf(']'));
                }
 
-
-               Logger.DEBUG("Twitter Object:" + position);
-               if (position == null) {
-                  positions.add(Geocoding.getCoordinates(status.getUser().getLocation()));
+               if (geo == null) {
+                  positions.add(new GSPosition(Geocoding.getCoordinates(status.getUser().getLocation()), true));
                }
                else {
-                  positions.add(position);
+                  positions.add(new GSPosition(geo, false));
                }
+
+
             }
 
 
@@ -267,18 +267,8 @@ public class TwitterPanel
 
 
          final StatusParsed statusParsed = URLParser.parseStatus(status);
-
-
-         Logger.DEBUG(statusParsed.toString());
-
-
          final String statusHTML = decorateMsg(statusParsed, status);
-
-
          testLabel.setText(statusHTML);
-
-
-         // testLabel.setBackground(Styles.blueTwitter);
          testLabel.setBackground(new Color(0, 0, 0, 0));
          testLabel.setAutoscrolls(false);
          testLabel.setPreferredSize(new Dimension(177, 100));
@@ -303,8 +293,6 @@ public class TwitterPanel
       catch (final MalformedURLException e) {
          System.out.println("User Photo Exception!");
       }
-
-      Logger.DEBUG(System.getProperty("os.name"));
       return messagePanel;
    }
 
@@ -329,7 +317,6 @@ public class TwitterPanel
       for (final URL photo : photos) {
          htmlStatus = htmlStatus.replace(photo.toString(), "<a href=\"" + photo.toString() + "\">" + photo.toString() + "</a>");
       }
-      Logger.DEBUG(htmlStatus);
       return htmlStatus;
    }
 }

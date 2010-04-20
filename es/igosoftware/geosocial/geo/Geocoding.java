@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.igosoftware.geosocial.utils.Logger;
+
 
 public class Geocoding {
 
@@ -19,6 +21,8 @@ public class Geocoding {
 
    public static String getCoordinates(final String name) {
 
+
+      Logger.DEBUG(name);
       final String path = "http://ws.geonames.org/searchJSON?formatted=true&q=" + name + "&maxRows=1&lang=es&style=full";
 
       URL url;
@@ -43,8 +47,13 @@ public class Geocoding {
          final JSONArray array = (JSONArray) responseJson.get("geonames");
 
          int i = 0;
-         for (i = 0; i < array.length(); i++) {
-            Geocoding._coordinates = array.getJSONObject(i).get("lat") + "," + array.getJSONObject(i).get("lng");
+         for (i = 0; i < 1; i++) {
+            try {
+               Geocoding._coordinates = array.getJSONObject(i).get("lat") + "," + array.getJSONObject(i).get("lng");
+            }
+            catch (final Exception e) {
+               Logger.SEVERE("problem geocoding:" + name);
+            }
          }
 
       }
