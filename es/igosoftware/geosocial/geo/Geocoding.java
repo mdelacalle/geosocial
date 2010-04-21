@@ -21,8 +21,6 @@ public class Geocoding {
 
    public static String getCoordinates(final String name) {
 
-
-      Logger.DEBUG(name);
       final String path = "http://ws.geonames.org/searchJSON?formatted=true&q=" + name + "&maxRows=1&lang=es&style=full";
 
       URL url;

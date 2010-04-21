@@ -70,6 +70,8 @@ public class GeoSocial
          _sp.add(this.wwd);
 
          _sp.setDividerLocation(this.getWidth() / 5);
+
+         setupSelectListener();
          this.getContentPane().add(_sp);
 
 
@@ -120,6 +122,11 @@ public class GeoSocial
       thread.start();
 
 
+   }
+
+
+   private void setupSelectListener() {
+      wwd.addSelectListener(new SelectListener(wwd));
    }
 
 

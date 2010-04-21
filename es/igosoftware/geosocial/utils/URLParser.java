@@ -57,11 +57,10 @@ public class URLParser {
    private static boolean isPhoto(final String group) {
 
       if (group.contains("moby.to") || group.contains("twitpic.com") || group.contains("tweetphoto.com")
-          || group.contains("ow.ly") || group.contains("yfrog")) {
+          || group.contains("ow.ly") || group.contains("yfrog") || group.contains("movapic.com")) {
          return true;
       }
       return false;
 
    }
-
 }
