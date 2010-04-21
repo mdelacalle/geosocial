@@ -143,7 +143,8 @@ public class TwitterPanel
             statusPanel.setLayout(new VerticalLayout());
             statusPanel.setBackground(new Color(0, 0, 0, 0));
 
-            final List<Status> statuses = tw.getHomeTimeline();
+            //   final List<Status> statuses = tw.getHomeTimeline();
+            final List<Status> statuses = tw.getPublicTimeline();
 
 
             final ArrayList<GSPosition> positions = new ArrayList<GSPosition>();

@@ -3,12 +3,16 @@ package es.igosoftware.geosocial;
 import es.igosoftware.geosocial.gui.Styles;
 import es.igosoftware.geosocial.gui.TwitterMarker;
 import es.igosoftware.geosocial.utils.Logger;
+import es.igosoftware.geosocial.utils.SystemUtilities;
 import es.igosoftware.geosocial.utils.TwitterUtils;
 import es.igosoftware.geosocial.utils.URLParser;
+import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.AnnotationLayer;
+import gov.nasa.worldwind.pick.PickedObject;
+import gov.nasa.worldwind.render.Annotation;
 import gov.nasa.worldwind.render.AnnotationAttributes;
 import gov.nasa.worldwind.render.GlobeAnnotation;
 
@@ -17,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import winterwell.jtwitter.Twitter.Status;
 
@@ -69,14 +74,12 @@ public class SelectListener
          GlobeAnnotation ga;
          try {
 
-            Logger.DEBUG("<p>\n<b><font color=\"#664400\">" + status.getUser().getName() + "</font></b>" + "<img src=\""
-                         + status.getUser().getProfileImageUrl().toURL() + "\">\n</p><p>"
-                         + TwitterUtils.decorateMsg(URLParser.parseStatus(status), status) + "</p>");
-
             ga = new GlobeAnnotation("<p>\n<b><font color=\"#664400\">" + status.getUser().getName() + "</font></b>"
                                      + "<img src=\"" + status.getUser().getProfileImageUrl().toURL() + "\">\n</p><p>"
                                      + TwitterUtils.decorateMsg(URLParser.parseStatus(status), status) + "</p>", position, aa);
 
+
+            setupSelectListener();
 
             final AnnotationLayer annotationsLayer = new AnnotationLayer();
             annotationsLayer.addAnnotation(ga);
@@ -90,5 +93,42 @@ public class SelectListener
 
       }
 
+
+   }
+
+
+   private void setupSelectListener() {
+      wwd.addSelectListener(new SelectListener(wwd) {
+
+
+         @Override
+         public void selected(final SelectEvent event) {
+            if (event.getEventAction().equals(SelectEvent.LEFT_CLICK)) {
+               if (event.hasObjects()) {
+                  if (event.getTopObject() instanceof Annotation) {
+                     // Check for text or url
+                     final PickedObject po = event.getTopPickedObject();
+                     if (po.getValue(AVKey.URL) != null) {
+
+                        try {
+                           URL url;
+
+                           url = new URL(po.getValue(AVKey.URL).toString());
+
+
+                           Logger.DEBUG("URL:" + url.toString());
+                           SystemUtilities.openBrowser(url);
+                           event.getObjects().removeAll(event.getObjects());
+                        }
+                        catch (final MalformedURLException e) {
+                           // TODO Auto-generated catch block
+                           e.printStackTrace();
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      });
    }
 }
